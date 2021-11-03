@@ -31,6 +31,12 @@ export class FlightSearchComponent implements OnInit {
   ngOnInit() {
   }
 
+  /* getFlightDetails() {
+    const flights = this.flightService.flights;
+    const firstFlight = flights[0];
+    this.from = firstFlight.from;
+  } */
+
   search(): void {
     if (!this.from || !this.to) return;
 
@@ -43,3 +49,25 @@ export class FlightSearchComponent implements OnInit {
   }
 
 }
+
+
+/* const flightsState = {
+  ids: [3, 5, 9, 7, 6],
+  entities: {
+    5: {
+      id: 5,
+      from: 'Hamburg',
+      to: 'Graz'
+    },
+    3: {
+      id: 3,
+      from: 'Hamburg',
+      to: 'Graz'
+    }
+  }
+}
+
+const flightFive = flightState.entities[5];
+const flightsArr = flightsState.ids.map(id => flightsState.entities[id]);
+
+flightsState.ids.push(11); */
