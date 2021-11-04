@@ -14,6 +14,8 @@ import { HomeComponent } from './home/home.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { SharedModule } from './shared/shared.module';
 import { SidebarComponent } from './sidebar/sidebar.component';
+import { TrackbyDemoComponent } from './trackby-demo/trackby-demo.component';
+import { TrackbyChildComponent } from './trackby-demo/trackby-child/trackby-child.component';
 
 @NgModule({
   imports: [
@@ -33,7 +35,9 @@ import { SidebarComponent } from './sidebar/sidebar.component';
     SidebarComponent,
     NavbarComponent,
     HomeComponent,
-    BasketComponent
+    BasketComponent,
+    TrackbyDemoComponent,
+    TrackbyChildComponent
   ],
   providers: [],
   bootstrap: [AppComponent]

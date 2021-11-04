@@ -1,0 +1,14 @@
+<div class="card">
+  <div class="header">
+    <h2 class="title">TrackBy Demo</h2>
+  </div>
+  <div class="content">
+
+    <button (click)="changeState(2)" class="btn btn-default">Change to State 2</button>
+
+    <ng-container *ngFor="let item of state1; trackBy: identify">
+      <flight-workspace-trackby-child [item]="item"></flight-workspace-trackby-child>
+    </ng-container>
+
+  </div>
+</div>
