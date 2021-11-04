@@ -1,18 +1,40 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 /* eslint-disable @angular-eslint/no-empty-lifecycle-method */
-import {Component, OnInit} from '@angular/core';
+import {Component, Injectable, OnDestroy, OnInit} from '@angular/core';
 import {FlightService} from '@flight-workspace/flight-lib';
+import { Observable, PartialObserver, Subscription, tap, timer } from 'rxjs';
+
+
+@Injectable()
+export class RxConnector implements OnDestroy {
+  private subscription = new Subscription();
+
+  connect<T>(stream$: Observable<T>, observer?: PartialObserver<T>): Subscription {
+    const subscription = stream$.subscribe(observer);
+    this.subscription.add(subscription);
+    return subscription;
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
+  }
+}
 
 @Component({
   selector: 'flight-search',
   templateUrl: './flight-search.component.html',
-  styleUrls: ['./flight-search.component.css']
+  styleUrls: ['./flight-search.component.css'],
+  providers: [RxConnector]
 })
-export class FlightSearchComponent implements OnInit {
+export class FlightSearchComponent implements OnInit, OnDestroy {
 
   from = 'Hamburg'; // in Germany
   to = 'Graz'; // in Austria
   urgent = false;
+  timer$ = timer(0, 1_000).pipe(
+    tap(console.log)
+  );
+  subscriptions = new Subscription();
 
   get flights() {
     return this.flightService.flights;
@@ -25,10 +47,31 @@ export class FlightSearchComponent implements OnInit {
   };
 
   constructor(
-    private flightService: FlightService) {
+    private flightService: FlightService,
+    private rx: RxConnector) {
   }
 
   ngOnInit() {
+    this.subscriptions.add(
+      this.timer$.subscribe(value => console.log('TS Subscribe', value))
+    );
+
+    this.rx.connect(
+      this.timer$,
+      {
+        next: value => console.log('TS Connect 1', value)
+      }
+    );
+
+    this.rx.connect(
+      this.timer$.pipe(
+        tap(value => console.log('TS Connect 2', value))
+      )
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
   }
 
   /* getFlightDetails() {
